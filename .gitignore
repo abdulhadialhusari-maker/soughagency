@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+
+.vercel
+.env*
+
+# local QA artifacts (screenshots + recordings, regenerate via npm run qa:shots / scripts/motion-qa.mjs)
+qa-previews/

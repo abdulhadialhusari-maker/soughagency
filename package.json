@@ -1,0 +1,29 @@
+{
+  "name": "sogh-agency-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5181",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5181",
+    "sync:brand": "node scripts/sync-brand.mjs",
+    "qa:shots": "node scripts/qa-shots.mjs",
+    "qa:typography": "node scripts/typography-qa.mjs",
+    "qa:typography:pass3": "node scripts/typography-pass3-qa.mjs",
+    "qa:hero-word": "node scripts/hero-word-qa.mjs",
+    "qa:release": "node scripts/release-qa.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "puppeteer-core": "^25.3.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3"
+  }
+}

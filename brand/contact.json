@@ -1,0 +1,24 @@
+{
+  "$doc": "SOGH contact config — single source of truth for confirmed public contact details across the app, sales kit, and all print/social exports. Synced from the v1.1 fork on 2026-07-16 per owner decision. RULES: empty values are unconfirmed and MUST stay hidden from every interface and export (no placeholders in client-facing output). The domain is NOT registered yet — never present any domain as official until confirmed. The phone number is telephone-only; WhatsApp is not confirmed. After any change, regenerate exports: npm run dev (keep running) + npm run exports:svg + npm run exports:png, then node scripts/verify-exports.mjs.",
+  "confirmed": true,
+  "email": "soghagency@gmail.com",
+  "phone": "+966 53 677 4357",
+  "phoneLocal": "0536774357",
+  "domain": "",
+  "whatsapp": "",
+  "handles": {
+    "instagram": "@soghagency",
+    "tiktok": "@soghagency",
+    "snapchat": "@soghagency",
+    "x": "",
+    "linkedin": ""
+  },
+  "links": {
+    "instagram": "https://www.instagram.com/soghagency/",
+    "tiktok": "https://www.tiktok.com/@soghagency",
+    "snapchat": "https://www.snapchat.com/add/soghagency",
+    "x": "",
+    "linkedin": "",
+    "whatsapp": ""
+  }
+}

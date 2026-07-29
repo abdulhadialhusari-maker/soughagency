@@ -1,0 +1,12 @@
+# TEMPORARY soft-launch rules — the official SOGH domain is not registered yet.
+# Visitors can browse normally; this only asks search engines not to index
+# the temporary vercel.app URL.
+#
+# WHEN THE OFFICIAL DOMAIN IS CONNECTED:
+#   1. Replace this file with normal rules (Allow all + Sitemap line).
+#   2. Remove the <meta name="robots" content="noindex, nofollow"> tag
+#      from index.html.
+#   3. Rebuild and redeploy. See DEPLOYMENT.md.
+
+User-agent: *
+Disallow: /

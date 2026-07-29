@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-label="الوحدة المصوغة — نسخة داكنة">
+  <title>الوحدة المصوغة — نسخة داكنة</title>
+  <g stroke="#315CFF" stroke-width="2" opacity="0.5">
+    <line x1="60" y1="210" x2="360" y2="210"/>
+    <line x1="210" y1="60" x2="210" y2="360"/>
+  </g>
+  <g transform="translate(-370 -12) scale(1.68)">
+    <path d="M 386 126 C 372 106 336 100 318 112 C 306 120 306 136 318 143 C 336 153 372 147 386 126 Z" fill="none" stroke="#F4F0E8" stroke-width="14" stroke-linejoin="round"/>
+  </g>
+  <circle cx="312" cy="128" r="17" fill="#315CFF"/>
+</svg>

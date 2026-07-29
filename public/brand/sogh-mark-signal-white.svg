@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 80" role="img" aria-label="خط الإشارة — نسخة داكنة">
+  <title>خط الإشارة — نسخة داكنة</title>
+  <path d="M 592 40 L 578 16 L 564 62 L 550 22 L 538 58 L 526 30 L 514 50 L 502 36" fill="none" stroke="#F4F0E8" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M 502 36 C 470 41 440 40 400 40 L 80 40" fill="none" stroke="#F4F0E8" stroke-width="6" stroke-linecap="butt"/>
+  <circle cx="48" cy="40" r="9" fill="#315CFF"/>
+</svg>

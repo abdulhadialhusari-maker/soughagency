@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 88" role="img" aria-label="SOGH — English companion">
+  <title>SOGH — English companion</title>
+  <path d="M 62 24 C 56 13 22 12 20 26 C 18 40 58 38 56 53 C 54 68 18 68 13 55" fill="none" stroke="#0A0B0D" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round"/>
+  <circle cx="112" cy="42" r="26" fill="none" stroke="#0A0B0D" stroke-width="9"/>
+  <path d="M 206 24 A 26 26 0 1 0 212 46 L 186 46" fill="none" stroke="#0A0B0D" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round"/>
+  <path d="M 238 16 L 238 68 M 274 16 L 274 68 M 238 42 L 274 42" fill="none" stroke="#0A0B0D" stroke-width="9" stroke-linecap="butt" stroke-linejoin="round"/>
+  <circle cx="186" cy="78" r="5" fill="#315CFF"/>
+</svg>

@@ -1,0 +1,9 @@
+# local QA artifacts and docs that are not needed for the remote build
+qa-previews
+dist
+WEBSITE-QA.md
+DEPLOYMENT.md
+.claude
+# local credentials — never upload
+.env.local
+.env*
