@@ -202,38 +202,8 @@ const STUDIES: readonly CaseStudy[] = [
         alt: "إطار من محتوى دار ورد المصوَّر داخل مقر العمل",
       },
     ],
-    /*
-     * The record is the operating spine beside the produced work: what the
-     * engagement ran, not what it looked like. The August content plan stays
-     * out of it as OUTPUT — every row is marked «بانتظار الاعتماد» and «لم
-     * يبدأ», so it evidences planning only, and it carries staff names,
-     * unapproved pricing and a pending offer that must never reach a public
-     * page. The videos now carry the execution evidence instead.
-     */
-    record: [
-      { label: "استراتيجية ومنظومة محتوى شهرية" },
-      { label: "خطة نشر عبر إنستقرام وتيك توك وسناب" },
-      { label: "مقالات تحسين ظهور بالإنجليزية" },
-      { label: "حملات واتساب مدفوعة" },
-      { label: "تقارير أداء دورية" },
-    ],
-    /*
-     * Quoted from «التقرير التنفيذي لأداء حملة دار ورد» (data through
-     * 2026-07-18). Three of the report's figures, unrounded except 6,704 ->
-     * 6.7K. Spend and CPM are left out: the section is not an Ads Manager
-     * dashboard, and spend only means something next to the cost-per-visit,
-     * which the note below carries.
-     */
-    metrics: [
-      { value: "403", label: "زيارة واتساب" },
-      { value: "0.22 ر.س", label: "تكلفة الزيارة" },
-      { value: "6.7K", label: "وصول" },
-    ],
-    metricsNote:
-      "حققت إحدى حملات واتساب 403 زيارات بإجمالي إنفاق 87.12 ر.س، بمتوسط يقارب 0.22 ر.س للزيارة.",
     publication: "approved",
-    rightSource:
-      "owner 2026-09-14; media supplied 2026-09-16; figures from the client campaign report",
+    rightSource: "owner 2026-09-14; media supplied 2026-09-16",
   },
   {
     id: "mutas",

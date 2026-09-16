@@ -1281,9 +1281,17 @@ main:has(.positioning.is-entering) .clients__viewport {
     grid-column: 1;
   }
 
+  /*
+   * The span must equal the number of blocks in the copy column — four:
+   * number, title, description, capabilities. Spanning more rows than exist
+   * pushes the media's surplus height into empty trailing rows, which reads as
+   * a void under the copy; spanning exactly them lets that height distribute
+   * through the spine instead, so the capabilities settle against the foot of
+   * the media.
+   */
   .case--dossier .case__media {
     grid-column: 2;
-    grid-row: 1 / span 6;
+    grid-row: 1 / span 4;
     align-self: start;
   }
 
