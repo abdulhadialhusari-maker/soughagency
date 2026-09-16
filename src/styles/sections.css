@@ -1,0 +1,1502 @@
+/* =============================================================================
+   SOGH — clients, positioning, services, method, work, intelligence, about
+   ========================================================================== */
+
+/* --- clients ------------------------------------------------------------- */
+
+.clients {
+  /* about a quarter off the stock section rhythm: with a single band of logos
+     and no body copy, the standard padding left the section reading as empty
+     canvas around small marks */
+  /* declared here because this is the element that reads it: a custom
+     property inherits down, not across to a sibling section */
+  --blend: clamp(64px, 7vw, 112px);
+
+  padding-block: clamp(38px, 4.4vw, 62px);
+  border-top: 1px solid var(--line);
+  /*
+   * The raised tone resolves into the page ground before the section ends, so
+   * the clients band and the statement below it share an edge instead of
+   * meeting at one. The hairline that used to be drawn there is gone with it.
+   */
+  background: linear-gradient(
+    to bottom,
+    var(--surface-raised) 0,
+    var(--surface-raised) calc(100% - var(--blend)),
+    var(--ivory) 100%
+  );
+}
+
+.clients__title {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(14px, 1.5vw, 22px);
+  color: var(--cobalt);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+/* the same rule the section eyebrows carry, on the inline start */
+.clients__title::before {
+  width: 22px;
+  height: 1px;
+  flex: 0 0 auto;
+  background: currentColor;
+  content: "";
+}
+
+/*
+ * One quiet band, full bleed, no cells and no card chrome. The viewport clips
+ * the oversized track so the page itself never gains a horizontal scrollbar,
+ * and a short mask at each edge lets logos arrive and leave instead of being
+ * cut against a hard line.
+ */
+.clients__viewport {
+  --slot-w: clamp(212px, 17.7vw, 268px);
+  --slot-h: clamp(106px, 9vw, 142px);
+  --slot-gap: clamp(48px, 4.4vw, 72px);
+  --fade: clamp(36px, 7vw, 112px);
+  /* 38s, not 36s, because the slots grew and the gap shrank: the sequence is
+     now 1910px instead of 1814px, and holding 36s would have sped the travel
+     up by 5%. At 38s it stays at the 50.4px/s it was tuned to. */
+  --marquee-duration: 38s;
+
+  position: relative;
+  overflow: hidden;
+  /*
+   * LTR belongs here, not on the track. The viewport is what decides where an
+   * over-wide child is anchored: under the page's RTL it pinned the track's
+   * RIGHT edge, so the sequence on screen at t=0 was the aria-hidden clone and
+   * the real one sat off-canvas to the left. Anchoring the viewport LTR starts
+   * the loop on the real sequence.
+   */
+  direction: ltr;
+  /*
+   * Eased rather than linear: a straight ramp still reads as a cut because the
+   * alpha falls fastest where the eye is looking. The extra stops bias the
+   * fade so a logo thins out early and lingers faint at the very edge, which
+   * is what makes it dissolve instead of ending.
+   */
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.14) calc(var(--fade) * 0.34),
+    rgba(0, 0, 0, 0.62) calc(var(--fade) * 0.68),
+    rgba(0, 0, 0, 1) var(--fade),
+    rgba(0, 0, 0, 1) calc(100% - var(--fade)),
+    rgba(0, 0, 0, 0.62) calc(100% - var(--fade) * 0.68),
+    rgba(0, 0, 0, 0.14) calc(100% - var(--fade) * 0.34),
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.14) calc(var(--fade) * 0.34),
+    rgba(0, 0, 0, 0.62) calc(var(--fade) * 0.68),
+    rgba(0, 0, 0, 1) var(--fade),
+    rgba(0, 0, 0, 1) calc(100% - var(--fade)),
+    rgba(0, 0, 0, 0.62) calc(100% - var(--fade) * 0.68),
+    rgba(0, 0, 0, 0.14) calc(100% - var(--fade) * 0.34),
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/*
+ * Transforms ignore `direction`, so the travel is always leftward; the LTR
+ * anchor on the viewport is what keeps flex order and the start position right.
+ */
+.clients__track {
+  display: flex;
+  width: max-content;
+  animation: clients-marquee var(--marquee-duration) linear infinite;
+  will-change: transform;
+}
+
+.clients__seq {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clients__item {
+  display: grid;
+  width: var(--slot-w);
+  height: var(--slot-h);
+  flex: 0 0 auto;
+  /* the spacing is a trailing margin, not a gap — see the note in Clients.tsx */
+  margin-inline-end: var(--slot-gap);
+  place-items: center;
+}
+
+/*
+ * Each logo is bounded by its own share of the slot: wide wordmarks take width
+ * and give up height, stacked lockups and the round badge do the reverse, so
+ * six unrelated shapes read at one optical weight. `contain` scales to
+ * whichever bound binds first and the aspect ratio is never touched.
+ *
+ * The height bound is computed in px from the slot rather than written as a
+ * percentage: a percentage height needs a base its parent can agree on, and
+ * inside a content-sized item the wide wordmarks collapsed to a fifth of their
+ * budget.
+ */
+.clients__item img {
+  width: auto;
+  height: auto;
+  max-width: var(--logo-w, 60%);
+  max-height: calc(var(--slot-h) * var(--logo-h-frac, 0.6));
+  object-fit: contain;
+  -webkit-user-drag: none;
+}
+
+/*
+ * Two supplied logos carry their background as part of the artwork (gold on
+ * navy, white script on pale blue). Knocking that plate out would erase the
+ * logo, so it stays, with a small radius so the tile reads as artwork.
+ */
+.clients__item--plate img {
+  border-radius: 6px;
+}
+
+@keyframes clients-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* exactly one sequence: twelve equal slots, so half the track */
+    transform: translateX(-50%);
+  }
+}
+
+/* a calm courtesy, not an affordance: nothing here is clickable */
+.clients__viewport:hover .clients__track {
+  animation-play-state: paused;
+}
+
+/*
+ * Tablet band. The slot keeps its full size here, so the gap and the fade are
+ * what have to give: at 768 a 48px gap plus a 7vw fade left barely three
+ * marks on screen with visible dead air between them.
+ */
+@media (min-width: 701px) and (max-width: 1023px) {
+  .clients__viewport {
+    --slot-gap: clamp(30px, 4vw, 44px);
+    --fade: clamp(28px, 4.5vw, 56px);
+  }
+}
+
+@media (max-width: 700px) {
+  .clients__viewport {
+    --slot-w: clamp(156px, 47vw, 200px);
+    --slot-h: clamp(85px, 24.8vw, 113px);
+    --slot-gap: clamp(28px, 8.7vw, 44px);
+    --fade: clamp(28px, 9vw, 52px);
+    /* 49s for the same reason as 38s above: the sequence grew from 1193px to
+       1303px, so the duration grows with it and the travel stays at 26.5px/s */
+    --marquee-duration: 49s;
+  }
+}
+
+/*
+ * Reduced motion: no travel at all. The clone leaves the DOM flow, the mask
+ * comes off, and the real sequence becomes a centred wrapping row so all six
+ * logos are visible at once rather than frozen mid-scroll.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .clients__viewport {
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .clients__track {
+    width: 100%;
+    animation: none;
+    will-change: auto;
+  }
+
+  /*
+   * A grid, not a wrapping row: six fixed slots plus their gaps are wider than
+   * the container, so a flex row broke 5 + 1 and read as a mistake. Columns
+   * divide the width evenly instead, and the slot gives up its fixed width.
+   */
+  .clients__seq {
+    display: grid;
+    width: min(1120px, 100% - (var(--gutter) * 2));
+    margin-inline: auto;
+    gap: clamp(16px, 2.4vw, 32px);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* after the rule above, or equal specificity lets `display: grid` win and
+     the clone reappears alongside the real sequence */
+  .clients__seq--clone {
+    display: none;
+  }
+
+  .clients__item {
+    width: auto;
+    margin-inline-end: 0;
+  }
+
+  @media (max-width: 1023px) {
+    .clients__seq {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .clients__seq {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+/* =============================================================================
+   Clients -> Positioning hand-off
+   The logos are the proof; this statement is the conclusion drawn from them.
+   The two are tied together by tone, by one hairline, and by the marquee
+   stepping back as the statement arrives — not by a divider.
+   ========================================================================== */
+
+.positioning {
+  position: relative;
+  /* was clamp(54px, 6.2vw, 96px) via .section: 152px of dead air sat between
+     the last logo and the eyebrow at 1440 */
+  padding-top: clamp(34px, 3.8vw, 56px);
+  /* trimmed to pay for the detail column's new offset, so the composition
+     changes without the section simply getting taller */
+  padding-bottom: clamp(44px, 4.8vw, 70px);
+}
+
+/*
+ * The bridge. A hairline drops out of the marquee and lands on the cobalt
+ * point the eyebrow starts from — the same "resolves to a point" move the
+ * brand mark makes. One element, no ornament, decorative to AT.
+ */
+/* the rail overlays the section's top padding rather than adding to it —
+   the thread should fill the gap, not lengthen it */
+.positioning__rail {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  pointer-events: none;
+}
+
+.positioning__thread {
+  display: block;
+  width: 1px;
+  height: clamp(26px, 3.2vw, 46px);
+  background: linear-gradient(to bottom, transparent, var(--line-strong));
+}
+
+.positioning__thread::after {
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin-inline-start: -2px;
+  border-radius: 50%;
+  background: var(--cobalt);
+  content: "";
+  transform: translateY(calc(clamp(26px, 3.2vw, 46px) - 2px));
+}
+
+/*
+ * The marquee steps back as the statement arrives. `:has()` reads the state
+ * off the section below, which is the only direction CSS can look — the
+ * clients band precedes it in the DOM, so no sibling selector reaches it.
+ * Where `:has()` is unsupported the marquee simply stays at full strength.
+ */
+main:has(.positioning.is-entering) .clients__viewport {
+  opacity: 0.62;
+  filter: saturate(0.92);
+}
+
+.clients__viewport {
+  transition: opacity 620ms var(--ease), filter 620ms var(--ease);
+}
+
+.positioning__grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(32px, 5vw, 88px);
+}
+
+@media (min-width: 900px) {
+  /*
+   * Asymmetric on purpose. The statement column was the NARROWER of the two
+   * (40% against 54%), which read as a pair of text columns rather than a
+   * positioning statement with support hanging off it. The claim now takes
+   * ~58%, the detail ~35%, and the widened gutter carries the rest as
+   * deliberate negative space.
+   */
+  .positioning__grid {
+    column-gap: clamp(48px, 6vw, 96px);
+    grid-template-columns: minmax(0, 1.62fr) minmax(0, 0.98fr);
+  }
+
+  /*
+   * The detail column hangs from the headline's MIDPOINT, so nothing in it
+   * reaches the eye before the claim has registered.
+   *
+   * Starting it level with the supporting statement instead reads even
+   * cleaner, but measured 22% taller: the column then begins below a headline
+   * block it used to sit beside, and that height has to come from somewhere.
+   * The midpoint keeps the reading order honest and the section its size.
+   *
+   * The offset is derived from the type scale rather than picked — the
+   * eyebrow's line box, the gap the headline sits below, and one headline
+   * line — so it holds as the scale changes across breakpoints.
+   */
+  .positioning__body {
+    margin-block-start: calc(
+      (0.72rem * 1.4) + clamp(18px, 1.9vw, 26px) + (var(--step-4) * 1.32)
+    );
+  }
+}
+
+.positioning__lede .display {
+  margin-top: clamp(18px, 1.9vw, 26px);
+}
+
+/*
+ * A size of its own, between the section step and the hero's. At --step-4 the
+ * claim filled 42% of the column it owns and read undersized for a statement
+ * this section is named after; at --step-5 it would match the hero and flatten
+ * the page. This sits between them.
+ */
+.positioning__title {
+  font-size: clamp(1.85rem, 1.35rem + 2.3vw, 3.4rem);
+  /*
+   * A hair inside the 1.22–1.32 band rather than exactly on it. `.display`
+   * sets 1.32, and at the fractional sizes this clamp produces Chrome's
+   * computed line-height rounds to 1.3200005 — over the ceiling by half a
+   * millionth, which the typography gate correctly rejects. Visually this is
+   * 0.8px at 768. Scoped here so no other heading is touched.
+   */
+  line-height: 1.3;
+}
+
+/*
+ * Two-step hierarchy inside one heading: the qualifier is set back so the
+ * claim carries the weight. This is a permanent relationship, not a state the
+ * entrance animation leaves behind.
+ */
+.positioning__line--lead {
+  color: var(--text-muted);
+}
+
+.positioning__line--point {
+  color: var(--text);
+}
+
+.positioning__body {
+  display: grid;
+  gap: var(--s-4);
+}
+
+/*
+ * The supporting statement, directly under the claim. Held to a readable
+ * measure rather than the full column: at the primary column's width it would
+ * otherwise run past 70 Arabic characters a line.
+ */
+/*
+ * Measures are set in `em`, not `ch`: `ch` is the advance of "0", and Arabic
+ * glyphs run far narrower than that, so a ch-based cap lets the line run long.
+ * 20em holds the statement at ~54 characters and 21em the detail at ~55 —
+ * measured off real line boxes, not estimated.
+ */
+.positioning__statement {
+  max-width: 20em;
+  margin-block-start: clamp(18px, 1.9vw, 26px);
+}
+
+.positioning .prose {
+  max-width: 21em;
+}
+
+.positioning__system {
+  display: grid;
+  margin-top: var(--s-3);
+  border-top: 1px solid var(--line-strong);
+}
+
+/* a touch tighter: four rows of it drive the section's height */
+.positioning__system li {
+  padding-block: 12px;
+}
+
+.positioning__system li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-5);
+  border-bottom: 1px solid var(--line);
+  padding-block: 14px;
+}
+
+.positioning__label {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.positioning__note {
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  text-align: end;
+}
+
+/* --- services ------------------------------------------------------------
+   Rows on hairlines, not cards. The section also drops its white plate: it sat
+   as an isolated white band between two ivory sections, which read as a panel
+   bolted on rather than the next part of the argument. The ground is now
+   continuous and the structure does the separating.
+   ------------------------------------------------------------------------ */
+
+/* the intro is the section's quietest voice — hold it to a readable measure
+   rather than the half-container `.head--split` hands it (97 characters at
+   768). Scoped here: Method and Work share that head. */
+.services__intro {
+  max-width: 24em;
+}
+
+.services__list {
+  border-top: 1px solid var(--line-strong);
+}
+
+.service {
+  display: block;
+  border-bottom: 1px solid var(--line);
+}
+
+.service__row {
+  display: grid;
+  align-items: start;
+  gap: clamp(10px, 1.4vw, 18px);
+  padding-block: clamp(26px, 3vw, 40px);
+  transition: background var(--t-base) ease;
+}
+
+/* number and mark travel together as one unit at the row's start */
+.service__id {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.service__title {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 640;
+  letter-spacing: normal;
+  line-height: 1.3;
+  text-wrap: balance;
+  transition: transform var(--t-base) var(--ease);
+}
+
+.service__outcome {
+  max-width: 30em;
+  color: var(--text-muted);
+  font-size: var(--step-0);
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.service__items {
+  display: grid;
+  gap: 2px;
+}
+
+.service__items li {
+  position: relative;
+  padding-inline-start: 16px;
+  color: var(--text-faint);
+  font-size: var(--step--1);
+  /* four of these set each row's height; 1.65 keeps them comfortable and
+     takes ~9px a row out of the section */
+  line-height: 1.65;
+}
+
+.service__items li::before {
+  position: absolute;
+  inset-block-start: 0.8em;
+  inset-inline-start: 0;
+  width: 6px;
+  height: 1px;
+  background: var(--cobalt);
+  content: "";
+}
+
+.glyph {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  color: var(--slate-soft);
+  transition: color var(--t-base) ease;
+}
+
+/*
+ * Hover is a shift in emphasis, not a state change: nothing appears that was
+ * not already readable, so a keyboard or touch visitor loses nothing.
+ */
+@media (hover: hover) {
+  .service:hover .service__row {
+    background: var(--surface-raised);
+  }
+
+  .service:hover .service__title {
+    transform: translateX(-4px);
+  }
+
+  .service:hover .glyph {
+    color: var(--cobalt);
+  }
+}
+
+/* --- two columns: the row's own text, then what is inside it ------------- */
+@media (min-width: 760px) {
+  .service__row {
+    column-gap: clamp(28px, 3.4vw, 56px);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  }
+
+  .service__id {
+    grid-column: 1;
+  }
+
+  .service__title,
+  .service__outcome {
+    grid-column: 1;
+  }
+
+  .service__items {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+  }
+}
+
+/* --- four zones: id, group, outcome, contents --------------------------- */
+@media (min-width: 1080px) {
+  .service__row {
+    align-items: center;
+    /* the widest layout puts everything on one line, so the row needs less
+       vertical room than the stacked ones below it */
+    padding-block: clamp(28px, 2.4vw, 34px);
+    grid-template-columns:
+      auto minmax(0, 1.15fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  }
+
+  .service__id {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .service__title {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .service__outcome {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .service__items {
+    grid-column: 4;
+    grid-row: 1;
+    align-self: start;
+  }
+}
+
+/* --- method -------------------------------------------------------------- */
+
+/*
+ * 620, against the 680 every other display heading carries.
+ *
+ * Alexandria sets the ج dot inside the bowl, and the counter around it closes
+ * as weight rises. Measured on the rendered outline at 48px: the dot clears
+ * the surrounding ink by 2.12px at 560, 1.18px at 620, 0.94px at 640, 0.37px
+ * at 680, and at 720 it merges into the bowl as one contour. At 680 that gap
+ * is under a single device pixel on a 1x display, so it rasterises as an
+ * attached dot — which is exactly how it reads.
+ *
+ * 620 is the heaviest weight that keeps the counter above 1px, which is why
+ * it is 620 and not a rounder number: it is the smallest change that fixes
+ * the glyph. «منهج صَوْغ.» is the only display heading on the page containing
+ * a ج, so no other heading is affected, and the shaping is untouched — this
+ * is one weight on one heading, not a split word or a drawn dot.
+ */
+.method .display {
+  font-weight: 620;
+}
+
+.method {
+  background: var(--surface);
+  /* no rule separates this from Services any more, so the padding is the join;
+     the stock --section-y left 178px of empty ivory between the two */
+  padding-top: clamp(48px, 5.4vw, 78px);
+}
+
+/* the section's intro is its quietest voice — 77 characters at 1440 and 91 at
+   768 in the half-container `.head--split` hands it. Scoped: Services and Work
+   share that head. */
+.method__intro {
+  max-width: 26em;
+}
+
+.method__run {
+  position: relative;
+  display: grid;
+  gap: 0;
+}
+
+.method__rail {
+  position: absolute;
+  background: var(--line);
+}
+
+/*
+ * The travelled line, as a gradient rather than a solid bar.
+ *
+ * At full cobalt across 1230px it was the loudest thing in the section — it
+ * read as a completed progress meter and pulled the eye before the heading.
+ * Fading it out along the reading direction says the run starts at 01 and
+ * carries on, which is what a method is, and hands the emphasis back to the
+ * stage titles.
+ */
+.method__rail-fill {
+  position: absolute;
+  display: block;
+  background: linear-gradient(
+    to left,
+    var(--cobalt) 0%,
+    color-mix(in srgb, var(--cobalt) 34%, transparent) 62%,
+    color-mix(in srgb, var(--cobalt) 12%, transparent) 100%
+  );
+}
+
+.method__stage {
+  position: relative;
+  min-width: 0;
+}
+
+.method__node {
+  position: absolute;
+  z-index: 1;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--cobalt);
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+/*
+ * The number carries the sequence, so it is sized to be read as one — not the
+ * 0.74rem label it shares with every other numbered list on the page. Scoped
+ * here: `.num` is also used by About, Hero, Intelligence and Services.
+ */
+.method__number {
+  display: inline-block;
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.method__stage-title {
+  margin-block: 8px 10px;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 660;
+  letter-spacing: -0.02em;
+  line-height: 1.16;
+}
+
+/* capped so a longer stage does not simply become a heavier stage: at 768 the
+   first ran to 63 characters on one line while the last ran to 45 */
+.method__copy {
+  max-width: 24em;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+.method__marker {
+  display: block;
+  width: fit-content;
+  margin-top: clamp(14px, 1.5vw, 20px);
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  color: var(--text-faint);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+}
+
+/* The first node is filled: the run begins here. `:first-of-type`, not
+   `:first-child` — the rail span is the list's first child, so `:first-child`
+   matched nothing. */
+.method__stage:first-of-type .method__node {
+  background: var(--cobalt);
+}
+
+/* vertical rail below the wide breakpoint */
+@media (max-width: 899px) {
+  .method__rail {
+    inset-block: 6px 22px;
+    inset-inline-start: 5px;
+    width: 1px;
+  }
+
+  .method__rail-fill {
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: 100%;
+    transform-origin: top;
+  }
+
+  .method__stage {
+    padding-block: 0 clamp(28px, 5vw, 40px);
+    padding-inline-start: 32px;
+  }
+
+  .method__stage:last-child {
+    padding-bottom: 0;
+  }
+
+  .method__node {
+    inset-block-start: 6px;
+    inset-inline-start: 0;
+  }
+}
+
+/* horizontal rail from the wide breakpoint */
+@media (min-width: 900px) {
+  .method__run {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 44px);
+  }
+
+  .method__rail {
+    inset-block-start: 5px;
+    inset-inline: 5px;
+    height: 1px;
+  }
+
+  .method__rail-fill {
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    transform-origin: right; /* document is RTL */
+  }
+
+  .method__stage {
+    padding-top: 34px;
+  }
+
+  .method__node {
+    inset-block-start: 0;
+    inset-inline-start: 0;
+  }
+}
+
+/* =============================================================================
+   Selected work — the proof chapter
+   Editorial spreads, not cards. The media is the point: it carries 58% of the
+   row and is the only photographic matter on the page, so the section is where
+   the site finally shows rather than states. Everything else here is the same
+   hairline-and-ink language the rest of the page already speaks.
+   ========================================================================== */
+
+.work {
+  background: var(--surface);
+}
+
+/* the intro stays quiet — the work is this section's peak, not its heading */
+.work__intro {
+  max-width: 26em;
+}
+
+.work__list {
+  display: grid;
+  gap: clamp(64px, 8vw, 128px);
+}
+
+/* --- one case study ------------------------------------------------------ */
+
+/*
+ * Stacked by default, and the stack IS the DOM order: number, name, statement,
+ * media, description, capabilities, link. The evidence sits in the middle of
+ * the copy on a phone, where it reads as the answer to the line above it.
+ */
+.case {
+  display: grid;
+  row-gap: clamp(12px, 1.4vw, 18px);
+}
+
+.case__index {
+  margin: 0;
+}
+
+/* the number carries the sequence, like Method's — not the 0.74rem label
+   `.num` hands every other numbered list on the page */
+.case__index .num {
+  display: inline-block;
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.case__title {
+  display: grid;
+  gap: clamp(4px, 0.5vw, 8px);
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 680;
+  letter-spacing: normal;
+  line-height: 1.3;
+}
+
+.case__name {
+  font-size: var(--step-2);
+}
+
+/*
+ * The Arabic line is set one step under the name but in the display face and
+ * at full ink, so it still holds the block: Arabic runs physically wider than
+ * a Latin wordmark at the same size, and the page's language is Arabic. The
+ * name identifies; this line is what the project IS.
+ */
+.case__statement {
+  color: var(--text-muted);
+  font-size: var(--step-1);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.case__desc {
+  max-width: 34em;
+  margin: clamp(4px, 0.6vw, 10px) 0 0;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+/* capability labels: metadata on a hairline, never pills */
+.case__caps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: clamp(8px, 1vw, 14px);
+  border-top: 1px solid var(--line);
+  padding-top: clamp(10px, 1.1vw, 14px);
+  color: var(--text-faint);
+  font-size: var(--step--1);
+}
+
+.case__caps li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.case__caps li:not(:last-child)::after {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  opacity: 0.55;
+}
+
+.case__link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 9px;
+  margin-top: clamp(10px, 1.2vw, 16px);
+  color: var(--cobalt);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.case__link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--t-base) var(--ease);
+}
+
+.case__link:hover svg {
+  /* the page is RTL: forward is to the inline end, which is left */
+  transform: translateX(-4px);
+}
+
+/* --- the media ----------------------------------------------------------- */
+
+.case__media {
+  display: grid;
+  align-content: start;
+  gap: clamp(12px, 1.4vw, 20px);
+  min-width: 0;
+}
+
+/*
+ * A hairline, not a box. These captures carry their own near-white grounds,
+ * which would otherwise bleed into the ivory and lose their edges; the rule
+ * gives them a boundary without turning the spread into a card.
+ */
+.case__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+/* two real pieces of one campaign: the poster leads, the product detail
+   follows at the size its original actually supports */
+.case--pair .case__media {
+  align-items: start;
+  gap: clamp(10px, 1.2vw, 18px);
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+}
+
+/* --- the campaign mosaic ------------------------------------------------- */
+
+/*
+ * One engagement whose proof is a system rather than a single artefact: the
+ * audience the work was made for, then the pieces that reached them.
+ *
+ * The composition is a dominant visual over a two-by-two grid, NOT six equal
+ * boxes — equal sizing is what turns a case study into a feed. The lead spans
+ * both columns and the four supporting pieces sit under it at half its width,
+ * so the hierarchy states "this is the work, and here is the machinery behind
+ * it" before a single caption is read.
+ */
+.case__media--mosaic {
+  display: grid;
+  gap: clamp(8px, 0.9vw, 14px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.case__media--mosaic > [data-lead] {
+  grid-column: 1 / -1;
+  /* the lead is a 3:4 portrait; cropping it to a calmer band keeps it dominant
+     without letting one image own the whole section's height */
+  max-height: clamp(280px, 30vw, 430px);
+  object-fit: cover;
+  object-position: center 38%;
+}
+
+/* the supporting pieces are vertical social formats — hold them to one shape
+   so the grid reads as a set rather than a ragged collage */
+.case__media--mosaic > :not([data-lead]) {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+/* a video slot is a real control, so it keeps its own chrome and never gets a
+   hover affordance that would imply the still is clickable */
+.case__shot--video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--ink);
+}
+
+/* --- the dossier: produced content beside an operating spine ------------- */
+
+/*
+ * Deliberately not the mosaic again with different files.
+ *
+ * Mutas is a wide landscape band over a row of equal tiles — a campaign
+ * ecosystem seen at a glance. This engagement's proof is vertical social
+ * content, so it keeps that shape: one tall piece at the size it was shot for,
+ * with two more beneath it, running as a column beside the copy rather than
+ * across the page. The two read as related SOGH work without reading as the
+ * same template.
+ */
+.case__media--stack {
+  display: grid;
+  gap: clamp(10px, 1.1vw, 16px);
+  align-content: start;
+}
+
+.case__media-pair {
+  display: grid;
+  gap: clamp(10px, 1.1vw, 16px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* every piece keeps the 9:16 it was produced in — nothing is letterboxed into
+   a landscape frame it was never composed for */
+.case__media--stack .case__shot {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+}
+
+/* the record sits under the copy as a quiet ledger, not as a media substitute */
+.case--dossier .case__record {
+  margin-top: clamp(16px, 1.8vw, 24px);
+}
+
+/* --- the record: a study with no publishable visual ---------------------- */
+
+/*
+ * Dar Ward's engagement produced content and campaign operations, and no
+ * publishable image of it exists. Rather than borrow the logo or invent a
+ * mockup, the study states what was delivered — in the same hairline list
+ * language the positioning system and the about points already use, so it
+ * reads as a deliberate change of pace rather than a missing picture.
+ */
+.case__record {
+  align-self: start;
+  border-top: 1px solid var(--line-strong);
+}
+
+.case__record-label {
+  margin: clamp(12px, 1.4vw, 18px) 0 0;
+  color: var(--text-faint);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.case__record ul {
+  display: grid;
+  margin-top: clamp(8px, 1vw, 12px);
+}
+
+.case__record li {
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(11px, 1.2vw, 15px);
+  color: var(--text);
+  font-size: var(--step-0);
+}
+
+/* --- verified campaign figures ------------------------------------------- */
+
+/*
+ * The only numbers anywhere in Selected Work, so they are set to be read and
+ * then explained — not displayed as a dashboard.
+ *
+ * The note underneath is load-bearing rather than decorative: on its own "403"
+ * invites the reader to supply the wrong noun. The sentence names the spend and
+ * the per-visit cost, so the figure stays what the report actually measured.
+ */
+.case__metrics {
+  margin-top: clamp(14px, 1.6vw, 22px);
+  border-top: 1px solid var(--line-strong);
+  padding-top: clamp(14px, 1.6vw, 20px);
+}
+
+.case__metrics dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(20px, 3.4vw, 56px);
+  margin: 0;
+}
+
+.case__metric-value {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 680;
+  letter-spacing: normal;
+  line-height: 1.2;
+}
+
+.case__metric-label {
+  margin: 4px 0 0;
+  color: var(--text-faint);
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.case__metrics-note {
+  max-width: 44em;
+  margin: clamp(12px, 1.4vw, 18px) 0 0;
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+/* --- the close ----------------------------------------------------------- */
+
+.work__close {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 22px;
+  margin-top: clamp(56px, 6vw, 96px);
+  border-top: 1px solid var(--line);
+  padding-top: clamp(20px, 2.2vw, 30px);
+}
+
+.work__close-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 680;
+  line-height: 1.35;
+}
+
+.work__close-link {
+  font-size: var(--step-0);
+}
+
+/* --- desktop spread ------------------------------------------------------
+   1000px, not 900: at 1024 a stacked layout would give each study a
+   ~580px-tall image plus its body, and four of those is a scroll the section
+   does not earn. Two columns hold the row near 360px there instead. Below
+   1000 the spread stacks and reads as one vertical story.
+   ------------------------------------------------------------------------ */
+
+@media (min-width: 1000px) {
+  .case {
+    /*
+     * The body's rows are min-content and the whole row group is centred
+     * against the media, which spans them all. That is what lets the copy sit
+     * beside the evidence without a wrapper element — and without the wrapper,
+     * the mobile order above needed no reordering.
+     */
+    align-content: center;
+    column-gap: clamp(36px, 4.4vw, 72px);
+    grid-auto-rows: min-content;
+    /* body : media — the media takes ~58% */
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  }
+
+  .case__index,
+  .case__title,
+  .case__desc,
+  .case__caps,
+  .case__link {
+    grid-column: 1;
+  }
+
+  .case__media {
+    grid-column: 2;
+    /*
+     * `span 5`, not `1 / -1`: with no `grid-template-rows` the explicit grid
+     * has a single row line, so `-1` resolves back to line 1 and the media
+     * spans nothing — the copy then stacks BELOW it and the study grows by
+     * half again. Five is the maximum number of copy rows (number, name,
+     * description, capabilities, link); a study with fewer simply leaves the
+     * last implicit row at zero height.
+     */
+    grid-row: 1 / span 5;
+    align-self: center;
+  }
+
+  /* alternate which side the media takes — counted over the studies that
+     actually carry media, so the record study does not break the rhythm */
+  .case--flip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+  }
+
+  .case--flip .case__index,
+  .case--flip .case__title,
+  .case--flip .case__desc,
+  .case--flip .case__caps,
+  .case--flip .case__link {
+    grid-column: 2;
+  }
+
+  .case--flip .case__media {
+    grid-column: 1;
+  }
+
+  /*
+   * The mosaic study runs full width rather than beside its copy.
+   *
+   * Five pieces stacked in a 58% column reach about 1,400px, and the 300px of
+   * copy opposite them left most of the other column empty — negative space
+   * that read as a hole rather than as air. At full width the campaign gets
+   * real scale and the copy keeps a readable measure.
+   *
+   * The media stays between the title and the description, which is where the
+   * DOM puts it: visual, reading and FOCUS order therefore agree, and that
+   * matters here because this is the one study whose media contains a
+   * focusable control.
+   */
+  .case--mosaic {
+    align-content: start;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .case--mosaic .case__index,
+  .case--mosaic .case__title,
+  .case--mosaic .case__desc,
+  .case--mosaic .case__caps,
+  .case--mosaic .case__link {
+    grid-column: 1;
+  }
+
+  .case--mosaic .case__media {
+    grid-column: 1;
+    grid-row: auto;
+    align-self: stretch;
+    margin-block: clamp(14px, 1.6vw, 24px) clamp(16px, 1.8vw, 26px);
+  }
+
+  /* four supporting pieces across the full container, under the lead */
+  .case--mosaic .case__media--mosaic {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* the copy keeps a measure even though the media does not */
+  .case--mosaic .case__desc {
+    max-width: 44em;
+  }
+
+  /*
+   * Copy spine on one side, the produced content column on the other. The copy
+   * takes the larger share because it carries the description, seven capability
+   * labels, the delivery record and the campaign figures; the media column is
+   * sized so a 9:16 piece lands near 600px tall rather than towering.
+   */
+  .case--dossier {
+    align-content: start;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.56fr);
+  }
+
+  .case--dossier .case__index,
+  .case--dossier .case__title,
+  .case--dossier .case__desc,
+  .case--dossier .case__caps,
+  .case--dossier .case__record,
+  .case--dossier .case__metrics {
+    grid-column: 1;
+  }
+
+  .case--dossier .case__media {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+    align-self: start;
+  }
+
+  .case--dossier.case--flip {
+    grid-template-columns: minmax(0, 0.56fr) minmax(0, 1fr);
+  }
+
+  .case--dossier.case--flip .case__index,
+  .case--dossier.case--flip .case__title,
+  .case--dossier.case--flip .case__desc,
+  .case--dossier.case--flip .case__caps,
+  .case--dossier.case--flip .case__record,
+  .case--dossier.case--flip .case__metrics {
+    grid-column: 2;
+  }
+
+  .case--dossier.case--flip .case__media {
+    grid-column: 1;
+  }
+
+  /* the record has no image to balance, so the row stays short and its panel
+     aligns to the top — the section's quiet beat */
+  /*
+   * The copy column carries the description, seven capability labels and the
+   * campaign figures, so it takes the larger share — and which grid column
+   * that is depends on whether the study is flipped. Stating only the
+   * unflipped ratio handed the copy the NARROW column and wrapped the three
+   * figures onto two rows.
+   */
+  .case--record {
+    align-content: start;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.62fr);
+  }
+
+  .case--record.case--flip {
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.15fr);
+  }
+
+  .case--record .case__media {
+    align-self: start;
+  }
+}
+
+@media (max-width: 999px) {
+  /* the media earns a little more air than the copy rows around it */
+  .case__media {
+    margin-block: clamp(6px, 1.6vw, 14px) clamp(8px, 2vw, 16px);
+  }
+
+  .case--pair .case__media {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+
+  /*
+   * A full-width 9:16 hero is ~620px tall on a phone, so it is capped — but
+   * against WIDTH, not vh. A vh cap moves as mobile browser chrome shows and
+   * hides, which would resize the video mid-scroll.
+   */
+  .case--dossier .case__media--stack > .case__shot {
+    max-height: clamp(360px, 108vw, 470px);
+    object-position: center 30%;
+  }
+
+  .case__desc {
+    max-width: none;
+  }
+}
+
+/* --- intelligence -------------------------------------------------------- */
+
+.intel {
+  /* horizontal only — see the note on .hero: clipping both axes cropped the
+     ink of the heading that sits against this section's edge */
+  overflow-x: clip;
+}
+
+.intel__head {
+  position: relative;
+  display: grid;
+  /* wide enough that «داخل المنظومة، لا فوقها.» sits at ~80% of the column
+     rather than pressing against its edge */
+  max-width: 76ch;
+  gap: clamp(20px, 2vw, 28px);
+  margin-bottom: clamp(30px, 3.6vw, 54px);
+}
+
+/*
+ * «ذكاء اصطناعي يعمل» / «داخل المنظومة، لا فوقها.» was the tightest stacked
+ * pair left on the page: 1.1px of ink clearance at 768 and 1024, 2.2px at 1440,
+ * against 7.5–9.7px in the corrected About heading.
+ *
+ * It is tighter than About because this pair closes from BOTH sides. The first
+ * line ends «...اصطناعي يعمل», whose ي drops two dots below the baseline; the
+ * second opens «داخل المنظومة» and closes «فوقها.», stacking the dots of خ, ظ
+ * and ق above the cap line. About's pair only pushes from one side per line,
+ * which is why the same principle needs a larger coefficient here — 0.39em
+ * against About's 0.34em. The number is solved from the measurement, not
+ * copied.
+ *
+ * Fixed on the gap, as everywhere else on this page: `.display` keeps its
+ * leading inside the 1.22–1.32 band and the gap does the separating. Scoped to
+ * `.intel`, whose only `.display` is this heading.
+ */
+.intel .display {
+  gap: clamp(13px, 0.39em, 24px);
+}
+
+.intel__signal {
+  width: min(100%, 420px);
+  height: auto;
+  margin-top: var(--s-2);
+}
+
+.intel__grid {
+  display: grid;
+  gap: 1px;
+  border-block: 1px solid var(--line-invert);
+  background: var(--line-invert);
+}
+
+@media (min-width: 640px) {
+  .intel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .intel__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.intel__grid li {
+  min-width: 0;
+  padding: clamp(22px, 2.6vw, 32px);
+  background: var(--surface-ink);
+}
+
+.intel__grid h3 {
+  margin-block: 12px 6px;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 620;
+}
+
+.intel__grid p {
+  color: var(--text-invert-muted);
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+
+.intel__note {
+  max-width: 66ch;
+  margin-top: clamp(24px, 3vw, 40px);
+  border-inline-start: 2px solid var(--cobalt-soft);
+  padding-inline-start: 18px;
+  color: var(--text-invert-muted);
+  font-size: var(--step-0);
+}
+
+/* --- about --------------------------------------------------------------- */
+
+.about__grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(28px, 4vw, 76px);
+}
+
+@media (min-width: 900px) {
+  .about__grid {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+}
+
+/*
+ * «نفهم قبل» / «أن نصوغ.» is the tightest stacked pair on the site: the ق of
+ * قبل drops a deep tail and the غ of نصوغ carries its dot above the cap line,
+ * so the two lines' INK closes long before their line boxes do. Measured ink
+ * gap was 2.5px at 1024 and 3.4px at 1440, against 8–11px in the hero — the
+ * hero is the pair that reads correctly, so it sets the target.
+ *
+ * Fixed on the gap, in `em`, for the reason `.display` documents: the leading
+ * stays inside its band and the gap does the separating. ~+0.12em lands the
+ * ink clearance in the hero's range at every width.
+ *
+ * The top margin joins the same eyebrow -> heading value the hero, positioning
+ * and `.head--split` use; it was a flat 16px, the one heading off the system.
+ */
+.about__grid .display {
+  margin-top: clamp(18px, 1.9vw, 26px);
+  gap: clamp(13px, 0.34em, 24px);
+}
+
+.about__copy {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.about__points {
+  display: grid;
+  margin-top: var(--s-3);
+  border-top: 1px solid var(--line-strong);
+}
+
+.about__points li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  border-bottom: 1px solid var(--line);
+  padding-block: 12px;
+}
+
+.about__points p {
+  color: var(--text-muted);
+  font-size: var(--step-0);
+}

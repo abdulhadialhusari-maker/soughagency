@@ -4,16 +4,18 @@
  *
  *   npm run sync:brand
  *
- * Source of truth: C:\Users\HP\sogh-brand (override with SOGH_BRAND_DIR).
+ * Source of truth: the canonical sogh-brand repo, expected as a sibling of
+ * this one (../sogh-brand). Override with SOGH_BRAND_DIR — a relative value
+ * is resolved against this site's root.
  * Never edit the synced files here — change them in the canonical repo and
  * re-run the sync.
  */
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const site = join(dirname(fileURLToPath(import.meta.url)), "..");
-const brand = process.env.SOGH_BRAND_DIR ?? "C:\\Users\\HP\\sogh-brand";
+const brand = resolve(site, process.env.SOGH_BRAND_DIR ?? "../sogh-brand");
 
 if (!existsSync(brand)) {
   console.error(`canonical brand repo not found: ${brand}`);

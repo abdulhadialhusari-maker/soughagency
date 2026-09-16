@@ -1,0 +1,306 @@
+/* =============================================================================
+   SOGH — contact section and the brief form
+   ========================================================================== */
+
+.contact {
+  background: var(--surface);
+}
+
+.contact__grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(36px, 5vw, 80px);
+}
+
+@media (min-width: 980px) {
+  .contact__grid {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  }
+}
+
+.contact__intro .display {
+  /* eyebrow -> title 20–26px, title -> lead 24–30px */
+  margin-block: clamp(20px, 1.9vw, 26px) clamp(24px, 2.2vw, 30px);
+}
+
+.contact__intro .lead {
+  max-width: 44ch;
+}
+
+.contact__direct {
+  display: grid;
+  margin-top: clamp(22px, 2.6vw, 34px);
+  border-top: 1px solid var(--line-strong);
+}
+
+.contact__direct a {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  border-bottom: 1px solid var(--line);
+  padding-block: 12px;
+  transition: color var(--t-fast) ease, padding-inline var(--t-fast) ease;
+}
+
+.contact__direct a:hover {
+  padding-inline: 6px;
+  color: var(--cobalt);
+}
+
+.contact__direct span {
+  flex: 0 0 auto;
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.contact__direct bdi {
+  min-width: 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono-en);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+
+/* --- form ---------------------------------------------------------------- */
+
+.form {
+  border: 1px solid var(--line-strong);
+  padding: clamp(22px, 3vw, 42px);
+  background: var(--surface-plain);
+}
+
+.form__grid {
+  display: grid;
+  gap: var(--s-5);
+}
+
+@media (min-width: 620px) {
+  .form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form__field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.form__field {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  margin: 0;
+}
+
+.form__field label {
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.form__field label small {
+  color: var(--text-faint);
+  font-size: 0.76rem;
+  font-weight: 400;
+}
+
+.form__required {
+  color: var(--cobalt);
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-none);
+  padding: 12px 14px;
+  background: var(--surface-plain);
+  color: var(--text);
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.form textarea {
+  min-height: 140px;
+  line-height: 1.8;
+  resize: vertical;
+}
+
+.form input::placeholder,
+.form textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.form input:hover,
+.form select:hover,
+.form textarea:hover {
+  border-color: var(--line-ink);
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  border-color: var(--cobalt);
+  box-shadow: 0 0 0 3px var(--cobalt-wash);
+  outline: 0;
+}
+
+/* the error state carries a colour, a ring, AND a message — never colour alone */
+.form [aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-wash);
+}
+
+.form__error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.form__error::before {
+  content: "!";
+  display: grid;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.form__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  margin-top: clamp(22px, 2.6vw, 32px);
+}
+
+.form__note {
+  flex: 1;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.form__status:empty {
+  display: none;
+}
+
+.form__prepared {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-top: var(--s-5);
+  border-inline-start: 3px solid var(--success);
+  padding: 16px 18px;
+  background: var(--success-wash);
+}
+
+.form__prepared p {
+  font-size: var(--step--1);
+  font-weight: 500;
+}
+
+.form__prepared .btn {
+  min-height: 46px;
+  flex: 0 0 auto;
+  padding-block: 10px;
+}
+
+@media (max-width: 560px) {
+  .form__actions,
+  .form__prepared {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .form__actions .btn,
+  .form__prepared .btn {
+    width: 100%;
+  }
+}
+
+/* =============================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  padding-block: clamp(56px, 6vw, 84px) clamp(28px, 3vw, 36px);
+  background: var(--surface-ink);
+  color: var(--text-invert);
+}
+
+.site-footer__grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(32px, 4vw, 56px);
+}
+
+@media (min-width: 760px) {
+  .site-footer__grid {
+    grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  }
+}
+
+.site-footer__brand img {
+  width: clamp(168px, 18vw, 208px);
+  height: auto;
+}
+
+.site-footer__brand p {
+  max-width: 32ch;
+  margin-top: var(--s-4);
+  color: var(--text-invert-muted);
+  font-size: var(--step--1);
+}
+
+.site-footer__heading {
+  margin-bottom: var(--s-4);
+  color: var(--chalk-soft);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.site-footer li {
+  min-width: 0;
+}
+
+.site-footer li a {
+  display: inline-block;
+  min-height: 34px;
+  padding-block: 5px;
+  color: var(--text-invert-muted);
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+  transition: color var(--t-fast) ease;
+}
+
+.site-footer li a:hover {
+  color: var(--cobalt-soft);
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px var(--s-5);
+  grid-column: 1 / -1;
+  margin-top: clamp(12px, 2vw, 24px);
+  border-top: 1px solid var(--line-invert);
+  padding-top: var(--s-5);
+  color: var(--chalk-soft);
+  font-size: 0.78rem;
+}

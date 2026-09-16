@@ -1,0 +1,404 @@
+/* =============================================================================
+   SOGH — motion
+
+   One rule governs this file: every base state above is the FINAL state. With
+   JavaScript unavailable, an IntersectionObserver missing, or motion reduced,
+   the page renders complete and static — no armed element is ever left hidden
+   and no stroke is ever left undrawn.
+
+   Motion is used to direct attention, not to perform: each sequence plays once
+   and settles, nothing loops, nothing hijacks the scroll, and nothing delays
+   the content past roughly half a second.
+   ========================================================================== */
+
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes draw-in {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes point-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ring-out {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 0.24;
+    transform: scale(1);
+  }
+}
+
+@keyframes rail-fill-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes rail-fill-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* --- generic scroll reveal ----------------------------------------------- */
+
+.reveal.is-armed {
+  opacity: 0;
+}
+
+.reveal.is-revealed {
+  animation: settle-in 520ms var(--ease) both;
+  animation-delay: calc(var(--reveal-i, 0) * 70ms);
+}
+
+/*
+ * The positioning statement lands in two beats: the qualifier, then the claim.
+ * Word-level at most — the lines are already separate elements, so no text is
+ * split and nothing animates per character. ~0.9s on the site's own ease,
+ * which is an expo-out curve; no bounce, no overshoot.
+ */
+.positioning__lede.is-revealed .positioning__line--lead {
+  animation: settle-in 820ms var(--ease) 60ms both;
+}
+
+.positioning__lede.is-revealed .positioning__line--point {
+  animation: statement-in 900ms var(--ease) 220ms both;
+}
+
+@keyframes statement-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* the supporting statement follows the claim, it does not arrive with it */
+/* the supporting statement follows the claim rather than arriving with it */
+.positioning__lede.is-revealed .positioning__statement {
+  animation: settle-in 620ms var(--ease) 420ms both;
+}
+
+/* the thread draws down just before the statement resolves */
+.positioning.is-entering .positioning__thread {
+  animation: thread-in 700ms var(--ease) both;
+}
+
+@keyframes thread-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.positioning__thread {
+  transform-origin: top;
+}
+
+/* --- hero entrance (about 1.4s, once) ------------------------------------ */
+
+.hero--motion .hero__copy > * {
+  animation: settle-in 460ms var(--ease) backwards;
+}
+
+.hero--motion .eyebrow {
+  animation-delay: 60ms;
+}
+
+.hero--motion .hero__title {
+  animation-delay: 140ms;
+}
+
+.hero--motion .hero__lead {
+  animation-delay: 250ms;
+}
+
+.hero--motion .hero__actions {
+  animation-delay: 340ms;
+}
+
+.hero--motion .hero__pillars {
+  animation-delay: 420ms;
+}
+
+.hero--motion .hero__figure {
+  animation: fade-in 520ms var(--ease) 180ms backwards;
+}
+
+/* the motif resolves right to left, and the cobalt point lands last */
+.hero--motion .forge__grid,
+.hero--motion .forge__ticks {
+  animation: fade-in 420ms ease 240ms backwards;
+}
+
+.hero--motion .forge__noise circle {
+  animation: point-in 320ms var(--ease) backwards;
+  animation-delay: 300ms;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hero--motion .forge__drift line {
+  animation: fade-in 360ms ease 520ms backwards;
+}
+
+.hero--motion .forge__path {
+  stroke-dasharray: 1;
+  animation: draw-in 900ms var(--ease-out) 560ms both;
+}
+
+.hero--motion .forge__nodes circle {
+  animation: point-in 280ms var(--ease) backwards;
+  animation-delay: calc(760ms + var(--node-i, 0) * 130ms);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hero--motion .forge__rings circle {
+  animation: ring-out 620ms var(--ease-out) backwards;
+  animation-delay: calc(1420ms + var(--ring-i, 0) * 110ms);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hero--motion .forge__point {
+  animation: point-in 300ms var(--ease) 1320ms backwards;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* --- method rail --------------------------------------------------------- */
+
+.method.is-armed .method__rail-fill {
+  transform: scaleX(0);
+}
+
+.method.is-armed .method__stage {
+  opacity: 0;
+}
+
+.method.is-running .method__rail-fill {
+  animation: rail-fill-x 1100ms var(--ease-out) 120ms both;
+}
+
+.method.is-running .method__stage {
+  animation: settle-in 480ms var(--ease) both;
+  /* 100ms, not 160: four stages at 160 took 480ms just to finish arriving,
+     which read as a queue rather than a sequence */
+  animation-delay: calc(180ms + var(--stage-i, 0) * 100ms);
+}
+
+@media (max-width: 899px) {
+  .method.is-armed .method__rail-fill {
+    transform: scaleY(0);
+  }
+
+  .method.is-running .method__rail-fill {
+    animation-name: rail-fill-y;
+  }
+}
+
+/* --- selected work ------------------------------------------------------- */
+
+/*
+ * Two beats per study, not a stagger: the evidence arrives, then the copy that
+ * explains it. `Reveal` already carries the whole item in, so these only
+ * sequence what is inside it.
+ *
+ * The media's 1.015 -> 1 is the largest movement in the section and is still
+ * under two percent — enough to read as a settle, not as a zoom.
+ */
+.work__item.is-revealed .case__media {
+  animation: work-media-in 720ms var(--ease) both;
+}
+
+@keyframes work-media-in {
+  from {
+    opacity: 0;
+    transform: scale(1.015) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.work__item.is-revealed .case__index,
+.work__item.is-revealed .case__title,
+.work__item.is-revealed .case__desc,
+.work__item.is-revealed .case__caps,
+.work__item.is-revealed .case__metrics,
+.work__item.is-revealed .case__link {
+  animation: settle-in 560ms var(--ease) 160ms both;
+}
+
+/* --- intelligence band --------------------------------------------------- */
+
+.intel.motion-armed .sig-noise,
+.intel.motion-armed .sig-clear {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.intel.motion-armed .sig-dot,
+.intel.motion-armed .intel__head > :not(.intel__signal),
+.intel.motion-armed .intel__grid li,
+.intel.motion-armed .intel__note {
+  opacity: 0;
+}
+
+.intel.is-inview .sig-noise {
+  stroke-dasharray: 1;
+  animation: draw-in 340ms var(--ease) both;
+}
+
+.intel.is-inview .sig-clear {
+  stroke-dasharray: 1;
+  animation: draw-in 540ms var(--ease) 300ms both;
+}
+
+.intel.is-inview .sig-dot {
+  animation: point-in 220ms var(--ease) 820ms both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.intel.is-inview .intel__head > .eyebrow {
+  animation: settle-in 420ms var(--ease) 120ms backwards;
+}
+
+.intel.is-inview .intel__head > .display {
+  animation: settle-in 480ms var(--ease) 220ms backwards;
+}
+
+.intel.is-inview .intel__grid li {
+  animation: settle-in 460ms var(--ease) both;
+  animation-delay: calc(420ms + var(--reveal-i, 0) * 70ms);
+}
+
+.intel.is-inview .intel__note {
+  animation: settle-in 460ms var(--ease) 880ms both;
+}
+
+/* =============================================================================
+   Reduced motion — the visitor setting wins over every rule above
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-delay: 0ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  /* never leave a stroke undrawn, a rail unfilled, or a section hidden */
+  .sig-noise,
+  .sig-clear,
+  .forge__path {
+    stroke-dashoffset: 0 !important;
+  }
+
+  .reveal,
+  .method__stage,
+  .intel__grid li,
+  .intel__note,
+  .intel__head > *,
+  .sig-dot,
+  .clients__item {
+    opacity: 1 !important;
+  }
+
+  .clients__track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* the hand-off is a motion device; under reduced motion both sections
+     simply sit at their final state, full strength, correctly spaced */
+  .clients__viewport {
+    opacity: 1 !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  .positioning__thread,
+  .positioning__line--lead,
+  .positioning__line--point,
+  .positioning__statement {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* the work spread is evidence; it must never depend on motion to be seen */
+  .work__item .case__media,
+  .work__item .case__index,
+  .work__item .case__title,
+  .work__item .case__desc,
+  .work__item .case__caps,
+  .work__item .case__metrics,
+  .work__item .case__link {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .method__rail-fill {
+    transform: none !important;
+  }
+}

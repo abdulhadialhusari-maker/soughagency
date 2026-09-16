@@ -1,0 +1,113 @@
+/* =============================================================================
+   SOGH — Design tokens
+   The six approved brand colours (01_BRAND/COLORS/SOGH_Design_Tokens_2026-07-16.json)
+   are the only source hues. Everything else here is a tint, shade or alpha of
+   those hues, defined once so no component ever hard-codes a value.
+   ========================================================================== */
+
+:root {
+  /* --- approved brand hues -------------------------------------------- */
+  --ink: #0a0b0d;
+  --ivory: #f4f0e8;
+  --cobalt: #315cff;
+  --graphite: #24272d;
+  --mist: #dde3f0;
+  --white: #ffffff;
+
+  /* --- derived neutrals (warm, tuned to the ivory ground) -------------- */
+  --sand: #faf8f3;      /* raised surface on ivory */
+  --stone: #ebe6dc;     /* recessed surface / bars */
+  --slate: #4b515d;     /* secondary text — 7.0:1 on ivory */
+  --slate-soft: #5e6470; /* tertiary text — 5.2:1 on ivory, 4.6:1 on mist */
+  --chalk: #c8cfdd;     /* secondary text on ink — 9.6:1 */
+  --chalk-soft: #9aa3b4; /* tertiary text on ink — 6.1:1 */
+
+  /* --- cobalt scale ---------------------------------------------------- */
+  --cobalt-deep: #1f3fc4;   /* hover / pressed on light */
+  --cobalt-soft: #7d9bff;   /* accent on ink — 6.4:1 */
+  --cobalt-wash: rgba(49, 92, 255, 0.08);
+  --cobalt-line: rgba(49, 92, 255, 0.22);
+
+  /* --- surfaces -------------------------------------------------------- */
+  --surface: var(--ivory);
+  --surface-raised: var(--sand);
+  --surface-plain: var(--white);
+  --surface-cool: var(--mist);
+  --surface-ink: var(--ink);
+
+  /* --- text ------------------------------------------------------------ */
+  --text: var(--ink);
+  --text-muted: var(--slate);
+  --text-faint: var(--slate-soft);
+  --text-invert: var(--ivory);
+  --text-invert-muted: var(--chalk);
+
+  /* --- hairlines ------------------------------------------------------- */
+  --line: rgba(10, 11, 13, 0.14);
+  --line-strong: rgba(10, 11, 13, 0.32);
+  --line-ink: rgba(10, 11, 13, 0.9);
+  --line-invert: rgba(244, 240, 232, 0.18);
+  --line-invert-strong: rgba(244, 240, 232, 0.4);
+
+  /* --- state ----------------------------------------------------------- */
+  --danger: #a4231a;        /* 5.9:1 on white */
+  --danger-wash: rgba(164, 35, 26, 0.1);
+  --success: #17624a;       /* 6.4:1 on white */
+  --success-wash: rgba(23, 98, 74, 0.1);
+
+  /* --- type families --------------------------------------------------- */
+  --font-display: "Alexandria", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+  --font-mono-en: "Space Grotesk", "Inter", ui-monospace, sans-serif;
+
+  /* --- fluid type scale ------------------------------------------------ */
+  --step--1: clamp(0.82rem, 0.8rem + 0.12vw, 0.88rem);
+  --step-0: clamp(0.98rem, 0.95rem + 0.16vw, 1.06rem);
+  --step-1: clamp(1.1rem, 1.03rem + 0.34vw, 1.3rem);
+  --step-2: clamp(1.3rem, 1.15rem + 0.7vw, 1.75rem);
+  --step-3: clamp(1.6rem, 1.32rem + 1.3vw, 2.4rem);
+  --step-4: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+  --step-5: clamp(2.1rem, 1.35rem + 3vw, 3.75rem);
+  --step-hero: clamp(2.75rem, 1.5rem + 5.6vw, 6.4rem);
+
+  /* --- spacing --------------------------------------------------------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+
+  /* --- layout ---------------------------------------------------------- */
+  --container: 1240px;
+  --container-narrow: 880px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --header-h: 76px;
+  --section-y: clamp(54px, 6.2vw, 96px);
+
+  /* --- radii ----------------------------------------------------------- */
+  --r-none: 0px;
+  --r-sm: 4px;
+  --r-pill: 999px;
+
+  /* --- motion ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 160ms;
+  --t-base: 280ms;
+  --t-slow: 620ms;
+
+  /* --- elevation (used sparingly; the system is hairline-led) ---------- */
+  --shadow-sm: 0 1px 2px rgba(10, 11, 13, 0.05);
+  --shadow-lg: 0 28px 60px -28px rgba(10, 11, 13, 0.28);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --header-h: 84px;
+  }
+}

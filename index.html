@@ -3,26 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>صَوْغ | SOGH — نصوغ العلامات للنمو</title>
+
+    <title>صَوْغ | SOGH — وكالة تسويق ونمو سعودية</title>
     <meta
       name="description"
-      content="صَوْغ وكالة تسويق وإبداع سعودية تجمع الاستراتيجية والهوية والمحتوى والتجارب الرقمية والذكاء تحت قيادة بشرية."
+      content="صَوْغ وكالة تسويق ونمو سعودية تجمع الاستراتيجية والإبداع والأداء والذكاء الاصطناعي في منظومة واحدة، لتحويل الأفكار إلى نمو قابل للقياس."
     />
+    <link rel="canonical" href="https://soghagency.com/" />
+    <meta name="theme-color" content="#f4f0e8" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="صَوْغ | SOGH — نصوغ العلامات للنمو" />
+    <meta property="og:site_name" content="صَوْغ | SOGH" />
+    <meta property="og:locale" content="ar_SA" />
+    <meta property="og:url" content="https://soghagency.com/" />
+    <meta property="og:title" content="صَوْغ | SOGH — نصوغ الأفكار إلى نمو قابل للقياس" />
     <meta
       property="og:description"
-      content="استراتيجية، هوية، محتوى وتجارب رقمية ضمن نظام واحد يفهم مشروعك قبل أن يبدأ التنفيذ."
+      content="استراتيجية ونمو، تسويق وأداء، محتوى وإبداع، هوية وتجربة رقمية، وذكاء اصطناعي وأتمتة — تحت رؤية واحدة."
     />
-    <meta property="og:image" content="/sogh-og-1200x630.png" />
+    <meta property="og:image" content="https://soghagency.com/sogh-og-1200x630.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="صَوْغ | SOGH — نصوغ الأفكار إلى نمو قابل للقياس" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#F4F0E8" />
-    <!-- TEMPORARY soft-launch rule: remove this meta tag (and update robots.txt)
-         when the official domain is registered and connected. -->
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="twitter:title" content="صَوْغ | SOGH — نصوغ الأفكار إلى نمو قابل للقياس" />
+    <meta
+      name="twitter:description"
+      content="وكالة تسويق ونمو سعودية تجمع الاستراتيجية والإبداع والأداء والذكاء الاصطناعي في منظومة واحدة."
+    />
+    <meta name="twitter:image" content="https://soghagency.com/sogh-og-1200x630.png" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!--
+      All fonts are self-hosted, so there is no third-party stylesheet on the
+      critical path. Only the two faces the first screen actually paints with
+      are preloaded: the Arabic display face for the headline and the Arabic
+      body face for the copy under it.
+    -->
     <link
       rel="preload"
       href="/fonts/alexandria-arabic-variable.woff2"
@@ -30,12 +51,68 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/ibm-plex-sans-arabic-arabic-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
+
+    <!--
+      Structured data. Only facts recorded in the project appear here: the
+      contact details come from brand/contact.json, the legal entity from the
+      CR certificate. No street address or city is claimed, because none is
+      documented — add `address` once the national address is confirmed.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": ["Organization", "ProfessionalService"],
+            "@id": "https://soghagency.com/#organization",
+            "name": "صَوْغ",
+            "alternateName": ["SOGH", "صوغ", "SOGH Agency"],
+            "legalName": "مؤسسة فلك المسار الريادي",
+            "url": "https://soghagency.com/",
+            "logo": "https://soghagency.com/brand/sogh-lockup-bilingual-horizontal.svg",
+            "image": "https://soghagency.com/sogh-og-1200x630.png",
+            "email": "soghagency@gmail.com",
+            "telephone": "+966536774357",
+            "foundingDate": "2025",
+            "description": "وكالة تسويق ونمو سعودية تجمع الاستراتيجية والإبداع والأداء والذكاء الاصطناعي في منظومة واحدة.",
+            "address": { "@type": "PostalAddress", "addressCountry": "SA" },
+            "areaServed": { "@type": "Country", "name": "السعودية" },
+            "knowsLanguage": ["ar", "en"],
+            "sameAs": [
+              "https://www.instagram.com/soghagency/",
+              "https://www.tiktok.com/@soghagency",
+              "https://www.snapchat.com/add/soghagency"
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "خدمات صَوْغ",
+              "itemListElement": [
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "الاستراتيجية والنمو" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "التسويق والأداء" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "المحتوى والإبداع" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "الهوية والتجربة الرقمية" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "الذكاء الاصطناعي والأتمتة" } }
+              ]
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://soghagency.com/#website",
+            "url": "https://soghagency.com/",
+            "name": "صَوْغ | SOGH",
+            "inLanguage": "ar",
+            "publisher": { "@id": "https://soghagency.com/#organization" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

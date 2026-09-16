@@ -1,0 +1,217 @@
+/* =============================================================================
+   SOGH — hero
+   The primary action stays above the fold at 360, 390, 768, 1024 and 1440 by
+   sizing the type from the viewport rather than from a fixed scale, and by
+   letting the figure drop below the copy before the copy has to shrink.
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  display: grid;
+  align-items: center;
+  /* Clip the decorative arc horizontally only. `overflow: clip` on both axes
+     also cut the tails and diacritics of any heading sitting near the section
+     edge — and unlike `hidden`, `clip` does not force the other axis to
+     `auto`, so the vertical ink stays free. */
+  overflow-x: clip;
+  padding-block: clamp(44px, 6vw, 88px) clamp(56px, 7vw, 104px);
+  background: var(--surface);
+}
+
+/* one hairline arc, off-canvas, echoing the growth rings in the motif */
+.hero::before {
+  position: absolute;
+  width: 62vw;
+  height: 62vw;
+  max-width: 900px;
+  max-height: 900px;
+  border: 1px solid var(--cobalt-line);
+  border-radius: 50%;
+  content: "";
+  inset-block-start: -34vw;
+  inset-inline-start: -22vw;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero__grid {
+  position: relative;
+  display: grid;
+  align-items: center;
+  gap: clamp(40px, 6vw, 88px);
+}
+
+@media (min-width: 900px) {
+  .hero {
+    min-height: calc(100svh - var(--header-h));
+  }
+
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.14fr) minmax(290px, 0.86fr);
+  }
+}
+
+.hero__copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.hero__title {
+  max-width: 18ch;
+  /* eyebrow -> title 20–26px, title -> lead 24–30px */
+  margin-block: clamp(20px, 1.9vw, 26px) clamp(24px, 2.2vw, 30px);
+  /*
+   * The two lines are held apart by this gap, not by leading — `.display`
+   * keeps leading inside the 1.22–1.32 band and lets the gap do the work.
+   *
+   * Inherited, that gap was a px clamp measured against a font-size that
+   * follows the COLUMN (cqi), so the optical relationship drifted with the
+   * breakpoint: 0.18em of separation at 1440 but only 0.133em at 768, where
+   * the type is the same 60px. Expressed in `em` it states one relationship
+   * at every width, and lands ~0.10–0.15em above the old value so the promise
+   * and the measure read as two deliberate lines instead of one dense block.
+   * The px floor stops the same ratio turning into a hole at 360.
+   */
+  gap: clamp(11px, 0.28em, 20px);
+}
+
+.hero__accent {
+  color: var(--cobalt);
+}
+
+.hero__stop {
+  display: inline-block;
+  color: var(--cobalt);
+  font-size: 70%;
+  line-height: 1;
+}
+
+.hero__lead {
+  max-width: 46ch;
+}
+
+.hero__actions {
+  /* lead -> buttons 28–36px */
+  margin-top: clamp(28px, 2.6vw, 36px);
+}
+
+.hero__pillars {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  margin-top: clamp(22px, 2.6vw, 34px);
+  padding-top: clamp(14px, 1.7vw, 20px);
+  border-top: 1px solid var(--line);
+  color: var(--text-faint);
+  font-size: var(--step--1);
+}
+
+.hero__pillars li {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.hero__pillars li + li::before {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--cobalt);
+  content: "";
+  opacity: 0.7;
+}
+
+/* --- figure ------------------------------------------------------------- */
+
+.hero__figure {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  padding: clamp(18px, 2.4vw, 30px);
+  background: var(--surface-plain);
+}
+
+.hero__forge {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 600 / 640;
+}
+
+.hero__caption {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  margin-top: clamp(10px, 1.4vw, 18px);
+  border-top: 1px solid var(--line);
+  padding-top: clamp(12px, 1.4vw, 18px);
+  color: var(--text-muted);
+  font-size: var(--step--1);
+}
+
+@media (max-width: 899px) {
+  .hero__figure {
+    max-width: 460px;
+    margin-inline: auto;
+    width: 100%;
+  }
+}
+
+/* =============================================================================
+   ForgeField — the motif itself. Base state is the finished drawing.
+   ========================================================================== */
+
+.forge {
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+
+.forge__grid line,
+.forge__ticks line {
+  stroke: var(--ink);
+  stroke-width: 1;
+  opacity: 0.11;
+}
+
+.forge__ticks line {
+  opacity: 0.22;
+}
+
+.forge__noise circle {
+  fill: var(--graphite);
+  opacity: 0.46;
+}
+
+.forge__drift line {
+  stroke: var(--graphite);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.62;
+}
+
+.forge__path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.forge__nodes circle {
+  fill: var(--surface-plain);
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+
+.forge__rings circle {
+  fill: none;
+  stroke: var(--cobalt);
+  stroke-width: 1;
+  opacity: 0.24;
+}
+
+.forge__point {
+  fill: var(--cobalt);
+}

@@ -39,7 +39,14 @@ const SIGNAL = {
 
 /* ---------- marks ---------- */
 
-/** الشعار العربي المعتمد — stroke construction, draw-on ready via CSS classes. */
+/**
+ * الشعار العربي المعتمد — stroke construction, draw-on ready via CSS classes.
+ *
+ * Not rendered by the current page: the header and footer use the approved
+ * SVG lockups, and the hero carries the ForgeField motif. It is kept here as
+ * the mirror of the canonical letterforms so an animated wordmark never gets
+ * redrawn from scratch when one is next needed.
+ */
 export function ArabicWordmark({
   stroke,
   accent,
@@ -149,6 +156,36 @@ export function useMotionAllowed(): boolean {
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
   return allowed;
+}
+
+/**
+ * Live in-view state — unlike `useInViewOnce` it follows the element both ways.
+ *
+ * Used for the hand-off between the client marquee and the positioning
+ * statement: the marquee softens as the statement arrives and comes back if
+ * the visitor scrolls up again, so the effect reads as a relationship between
+ * the two sections rather than a one-way switch that fired once.
+ */
+export function useInView<T extends HTMLElement>(
+  enabled: boolean,
+  options?: IntersectionObserverInit,
+) {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const el = ref.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => setInView(entries.some((entry) => entry.isIntersecting)),
+      options,
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [enabled, options]);
+
+  return { ref, inView };
 }
 
 /** adds the returned ref to a section; fires true once when ~a third is visible. */

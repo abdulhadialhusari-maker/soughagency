@@ -1,7 +1,7 @@
 {
   "name": "sogh-agency-website",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5181",
@@ -9,9 +9,11 @@
     "preview": "vite preview --host 127.0.0.1 --port 5181",
     "sync:brand": "node scripts/sync-brand.mjs",
     "qa:shots": "node scripts/qa-shots.mjs",
-    "qa:typography": "node scripts/typography-qa.mjs",
-    "qa:typography:pass3": "node scripts/typography-pass3-qa.mjs",
-    "qa:hero-word": "node scripts/hero-word-qa.mjs",
+    "qa:sections": "node scripts/section-shots.mjs",
+    "qa:typography": "node scripts/arabic-typo-qa.mjs",
+    "qa:marquee": "node scripts/marquee-qa.mjs",
+    "qa:work": "node scripts/work-qa.mjs",
+    "qa:ink": "node scripts/heading-ink-qa.mjs",
     "qa:release": "node scripts/release-qa.mjs"
   },
   "dependencies": {

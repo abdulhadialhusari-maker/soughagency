@@ -1,0 +1,179 @@
+/* =============================================================================
+   SOGH — header and primary navigation
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  z-index: 100;
+  top: 0;
+  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--ivory) 86%, transparent);
+  backdrop-filter: blur(16px);
+  transition: border-color var(--t-base) ease, background var(--t-base) ease;
+}
+
+/* the only scroll response: a hairline appears and the bar tightens slightly */
+.site-header.is-condensed {
+  border-bottom-color: var(--line);
+  background: color-mix(in srgb, var(--ivory) 94%, transparent);
+}
+
+.site-header__inner {
+  display: flex;
+  min-width: 0;
+  min-height: var(--header-h);
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(12px, 2vw, 24px);
+  transition: min-height var(--t-base) var(--ease);
+}
+
+.site-header.is-condensed .site-header__inner {
+  min-height: calc(var(--header-h) - 8px);
+}
+
+.site-header__brand {
+  /* allowed to shrink: at 200% page zoom on a narrow phone the lockup and the
+     menu button together are wider than the viewport, and a rigid logo pushed
+     the button off-screen rather than giving up a few pixels */
+  min-width: 0;
+  flex: 0 1 auto;
+  line-height: 0;
+}
+
+.site-header__brand img {
+  width: clamp(126px, 12vw, 152px);
+  max-width: 100%;
+  height: auto;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 32px);
+}
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.site-nav__list a {
+  position: relative;
+  display: block;
+  padding-block: 6px;
+  color: var(--graphite);
+  font-size: 0.94rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color var(--t-fast) ease;
+}
+
+.site-nav__list a::after {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: var(--cobalt);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right; /* document is RTL */
+  transition: transform var(--t-base) var(--ease);
+}
+
+.site-nav__list a:hover,
+.site-nav__list a:focus-visible {
+  color: var(--ink);
+}
+
+.site-nav__list a:hover::after,
+.site-nav__list a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.site-nav__cta {
+  min-height: 44px;
+  padding: 10px 20px;
+  font-size: 0.92rem;
+}
+
+.menu-toggle {
+  display: none;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color var(--t-fast) ease;
+}
+
+.menu-toggle:hover {
+  border-color: var(--ink);
+}
+
+.menu-toggle span {
+  display: block;
+  width: 17px;
+  height: 1.5px;
+  margin: 5px auto;
+  background: var(--ink);
+  transition: transform var(--t-base) var(--ease);
+}
+
+.menu-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .site-nav {
+    position: absolute;
+    display: none;
+    max-height: calc(100svh - var(--header-h) - 24px);
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid var(--line-strong);
+    overflow-y: auto;
+    padding: 10px;
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-lg);
+    gap: 0;
+    inset-block-start: calc(100% + 8px);
+    inset-inline: 0;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+
+  .site-nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .site-nav__list a {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 12px;
+    font-size: 1rem;
+  }
+
+  .site-nav__list a::after {
+    display: none;
+  }
+
+  .site-nav__cta {
+    margin-top: 12px;
+    width: 100%;
+  }
+}

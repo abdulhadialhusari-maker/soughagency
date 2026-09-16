@@ -1,0 +1,230 @@
+/* =============================================================================
+   SOGH — container, section rhythm, buttons, shared surfaces
+   ========================================================================== */
+
+.container {
+  width: min(var(--container), 100% - (var(--gutter) * 2));
+  margin-inline: auto;
+}
+
+.container--narrow {
+  width: min(var(--container-narrow), 100% - (var(--gutter) * 2));
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-y);
+}
+
+.section--tight {
+  padding-block: clamp(52px, 6vw, 84px);
+}
+
+.section--hairline {
+  border-top: 1px solid var(--line);
+}
+
+.section--plain {
+  background: var(--surface-plain);
+}
+
+.section--raised {
+  background: var(--surface-raised);
+}
+
+.section--cool {
+  background: var(--surface-cool);
+}
+
+.section--ink {
+  background: var(--surface-ink);
+  color: var(--text-invert);
+}
+
+/* --- section heading block ---------------------------------------------- */
+
+.head {
+  display: grid;
+  max-width: 62ch;
+  gap: clamp(18px, 1.8vw, 26px);
+  margin-bottom: clamp(28px, 3.4vw, 52px);
+}
+
+.head--wide {
+  max-width: 74ch;
+}
+
+.head--split {
+  max-width: none;
+  align-items: end;
+  gap: clamp(24px, 4vw, 64px);
+}
+
+/*
+ * Eyebrow -> heading.
+ *
+ * `h2` is margin-reset and `.eyebrow` carries no bottom margin, so inside this
+ * head the label and the heading sat at a measured 0px apart at all five
+ * widths — the eyebrow read as the heading's first line rather than as the
+ * label above it. The hero and the positioning statement already solve this
+ * with clamp(18px, 1.9vw, 26px); reusing that value is what makes the three
+ * one system rather than three separate decisions.
+ *
+ * Scoped to `.head--split`, which is Services, Method and Work — no other
+ * section's spacing is touched.
+ */
+.head--split .display {
+  margin-top: clamp(18px, 1.9vw, 26px);
+}
+
+@media (min-width: 900px) {
+  .head--split {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .head--split > .prose {
+    padding-bottom: 6px;
+  }
+}
+
+/* --- buttons ------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--cobalt);
+  border-radius: var(--r-pill);
+  padding: 13px 28px;
+  background: var(--cobalt);
+  color: var(--white);
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  transition: background var(--t-fast) ease, border-color var(--t-fast) ease,
+    color var(--t-fast) ease, transform var(--t-fast) var(--ease);
+}
+
+.btn:hover {
+  background: var(--cobalt-deep);
+  border-color: var(--cobalt-deep);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn__arrow {
+  display: block;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  transition: transform var(--t-base) var(--ease);
+}
+
+.btn:hover .btn__arrow {
+  transform: translateX(-4px);
+}
+
+.btn--ghost {
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--text);
+}
+
+.btn--ghost:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+.on-ink .btn--ghost {
+  border-color: var(--line-invert-strong);
+  color: var(--text-invert);
+}
+
+.on-ink .btn--ghost:hover {
+  border-color: var(--ivory);
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* --- inline link with a drawn underline ---------------------------------- */
+
+.link {
+  position: relative;
+  color: var(--cobalt);
+  font-weight: 600;
+}
+
+.link::after {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  transform: scaleX(1);
+  transform-origin: right; /* document is RTL */
+  transition: transform var(--t-base) var(--ease);
+}
+
+.link:hover::after {
+  transform: scaleX(0.4);
+}
+
+/* --- tag / pill ---------------------------------------------------------- */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  padding: 5px 14px;
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.on-ink .tag {
+  border-color: var(--line-invert-strong);
+  color: var(--text-invert-muted);
+}
+
+/* --- the rule: a hairline that carries a cobalt cap ---------------------- */
+
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-faint);
+  font-family: var(--font-mono-en);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.rule::after {
+  height: 1px;
+  flex: 1;
+  background: var(--line);
+  content: "";
+}
+
+.on-ink .rule {
+  color: var(--chalk-soft);
+}
+
+.on-ink .rule::after {
+  background: var(--line-invert);
+}
